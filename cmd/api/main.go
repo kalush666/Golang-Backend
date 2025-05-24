@@ -2,6 +2,7 @@ package main
 
 import (
 	"BackendLearning/internal/env"
+	"BackendLearning/internal/store"
 	"github.com/joho/godotenv"
 	"log"
 )
@@ -12,11 +13,16 @@ func main() {
 	if err := godotenv.Load(); err != nil {
 		log.Printf("Warning: .env file not found")
 	}
+
+	// Initialize the storage layer
+	store := store.NewStorage(nil)
+
 	// Initialize the application with configuration
 	app := &application{
 		config: config{
 			addr: env.GetString("ADDR", ":8080"),
 		},
+		store: store,
 	}
 
 	// Initialize the application and mount the routes

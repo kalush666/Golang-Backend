@@ -1,6 +1,7 @@
 package main
 
 import (
+	"BackendLearning/internal/store"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"log"
@@ -13,6 +14,7 @@ import (
 // application struct holds the configuration for the application
 type application struct {
 	config config
+	store  store.Storage
 }
 
 // config struct holds the configuration for the application
