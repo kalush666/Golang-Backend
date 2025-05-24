@@ -23,11 +23,16 @@ type config struct {
 
 // NewApplication initializes a new application with the given configuration
 func (app *application) mount() http.Handler {
+	// Create a new Chi router
 	r := chi.NewRouter()
 
+	// Middleware for logging and recovering from panics
 	r.Use(middleware.Logger)
+	r.Use(middleware.Recoverer)
 
+	// Middleware for setting headers
 	r.Route("/v1", func(r chi.Router) {
+		// Set common headers for all routes under /v1
 		r.Get("/health", app.healthCheckHandler)
 	})
 
