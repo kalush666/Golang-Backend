@@ -26,9 +26,17 @@ func (app *application) mount() http.Handler {
 	// Create a new Chi router
 	r := chi.NewRouter()
 
-	// Middleware for logging and recovering from panics
+	// Middleware for logging
 	r.Use(middleware.Logger)
+	// Middleware for logging requests
 	r.Use(middleware.Recoverer)
+	// Middleware for generating and attaching a unique request ID to each request
+	r.Use(middleware.RequestID)
+	// Middleware for handling real IPs, useful if the app is behind a reverse proxy
+	r.Use(middleware.RealIP)
+
+	// Middleware for handling CORS
+	r.Use(middleware.Timeout(60 * time.Second))
 
 	// Middleware for setting headers
 	r.Route("/v1", func(r chi.Router) {
