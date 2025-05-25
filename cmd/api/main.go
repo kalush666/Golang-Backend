@@ -1,6 +1,7 @@
 package main
 
 import (
+	"BackendLearning/internal/db"
 	"BackendLearning/internal/env"
 	"BackendLearning/internal/store"
 	"github.com/joho/godotenv"
@@ -14,13 +15,28 @@ func main() {
 		log.Printf("Warning: .env file not found")
 	}
 
+	//set up the database configuration
+	cfg := dbConfig{
+		addr:         env.GetString("DB_ADDR", "postgres://user:adminpassword@localhost/social?sslmode=disable"),
+		maxOpenConns: env.GetInt("DB_MAX_OPEN_CONNS", 30),
+		maxIdleConns: env.GetInt("DB_MAX_IDLE_CONNS", 30),
+		maxIdleTime:  env.GetString("DB_MAX_IDLE_TIME", "15min"),
+	}
+
+	// Initialize the database connection
+	db, err := db.New(cfg.addr, cfg.maxOpenConns, cfg.maxIdleConns, cfg.maxIdleTime)
+	if err != nil {
+		log.Panic(err)
+	}
+
 	// Initialize the storage layer
-	store := store.NewStorage(nil)
+	store := store.NewStorage(db)
 
 	// Initialize the application with configuration
 	app := &application{
 		config: config{
 			addr: env.GetString("ADDR", ":8080"),
+			db:   cfg,
 		},
 		store: store,
 	}

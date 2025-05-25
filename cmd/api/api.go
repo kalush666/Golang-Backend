@@ -21,6 +21,15 @@ type application struct {
 type config struct {
 	// addr is the TCP address that the application will listen on
 	addr string
+	db   dbConfig
+}
+
+// dbConfig struct holds the database configuration for the application
+type dbConfig struct {
+	addr         string
+	maxOpenConns int
+	maxIdleConns int
+	maxIdleTime  string
 }
 
 // NewApplication initializes a new application with the given configuration

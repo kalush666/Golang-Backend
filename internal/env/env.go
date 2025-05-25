@@ -16,7 +16,7 @@ func GetString(key, fallback string) string {
 }
 
 // GetBool retrieves the value of the environment variable named by key as a boolean.
-func getInt(key string, fallback int) int {
+func GetInt(key string, fallback int) int {
 	// os.LookupEnv returns the value of the environment variable if it exists, otherwise it returns false.
 	val, ok := os.LookupEnv(key)
 	if !ok {
